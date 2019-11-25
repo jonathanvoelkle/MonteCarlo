@@ -285,40 +285,6 @@ To drop unwanted parts of the table, a list can be supplied to *partial_grid*, t
 
 There are only two required arguments. The first one, *path* specifies the path of the directory that contains the files that are supposed to be merged. The second one, *identifier* is a string that identifies which files should be merged. The string has to be a substring of the variable names of all files that are supposed to be merged, but it cannot be contained in the filenames of other files in the specified directory.
 
-## MakeFrame()
-
-It is often usefull to visualize the results of simulation studies with help of density plots, box plots and so on. To facilitate this, the MonteCarlo package does not provide its own suite of plotting functions. Instead, the function *MakeFrame()* converts the simulation results contained in the output of the *MonteCarlo()* function into a *data.frame* that is suitable to be manipulated and plotted with powerful standard tools such as *dplyr*, *ggplot2* and of course base graphics. The structure of the dataframe is such that each row contains the parameters used and the results of the simulation for one repetition. This is illustrated below.
-
-```{r}
-ttest<-function(n,loc,scale){
-  
-  sample<-rnorm(n, loc, scale)
-  stat<-sqrt(n)*mean(sample)/sd(sample)
-  return(list("stat"=stat))
-}
-```
-```{r include=FALSE}
-  MC_result<-MonteCarlo(func=ttest, nrep=1000, param_list=param_list)
-```
-```{r eval=FALSE}
- MC_result<-MonteCarlo(func=ttest, nrep=1000, param_list=param_list)
-```
-```{r}
-df<-MakeFrame(MC_result)
-head(df)
-```
-
-If *func* returns a list with more than one element, then each of the list elements has its own column in the dataframe
-
-One can now use the dataframe to conduct further analyses. For example, we can plot estimated densities for the distribution of the t-test with different sample sizes *n*.
-
-```{r message=FALSE, warning=FALSE}
-library(dplyr)
-library(ggplot2)
-tbl <- tbl_df(df)
-ggplot(filter(tbl, loc==0, scale==1)) + geom_density(aes(x=stat, col=factor(n)))
-```
-
 ## Further Examples: Comparison of Two Estimators
 
 In the previous sections we focused on the t-test as an example for the use of *MonteCarlo()* and *MakeTable()*. Here, we consider a second example: the evaluation of estimators. In particular, we compare the *mean()* and the *median()* as estimators for the expected value of a Gaussian random variable. This example serves to illustrate the use of the optinal arguments of the *MakeTable()* function.

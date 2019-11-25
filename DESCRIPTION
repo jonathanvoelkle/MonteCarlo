@@ -17,8 +17,7 @@ Imports:
     rlecuyer(>= 0.3-4),
     snowfall(>= 1.84-4),
     stats(>= 3.0.2),
-    utils(>= 3.0.2),
-    reshape(>= 0.8.6)
+    utils(>= 3.0.2)
 Depends:
     snow(>= 0.4-1)
 RoxygenNote: 6.1.1
